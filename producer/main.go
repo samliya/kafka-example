@@ -4,17 +4,13 @@ import (
 	"context"
 	"github.com/IBM/sarama"
 	"kafka-examples/conf"
+	"kafka-examples/utils"
 	"log"
-	"strconv"
 	"sync"
 	"time"
 )
 
-func main() {
-	topic := conf.Topic
-	asyncProducer(topic, 100_0000)
-}
-
+/*同步生产*/
 func syncProducer(topic string, limit int) {
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true
@@ -27,7 +23,7 @@ func syncProducer(topic string, limit int) {
 
 	var successes, errors int
 	for i := 0; i < limit; i++ {
-		str := genTimeStr()
+		str := utils.GenTimeStr()
 		message := &sarama.ProducerMessage{
 			Topic:     topic,
 			Key:       nil,
@@ -50,6 +46,7 @@ func syncProducer(topic string, limit int) {
 	log.Printf("发送完毕 总发送条数:%d successes: %d errors: %d\n", limit, successes, errors)
 }
 
+/*异步生产*/
 func asyncProducer(topic string, limit int) {
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true
@@ -80,7 +77,7 @@ func asyncProducer(topic string, limit int) {
 	}()
 
 	for i := 0; i < limit; i++ {
-		str := genTimeStr()
+		str := utils.GenTimeStr()
 		message := &sarama.ProducerMessage{
 			Topic:     topic,
 			Key:       nil,
@@ -106,8 +103,4 @@ func asyncProducer(topic string, limit int) {
 	producer.AsyncClose()
 	wg.Wait()
 	log.Printf("发送完毕 总发送条数:%d enqueued:%d timeout:%d successes: %d errors: %d\n", limit, enqueued, timeout, successes, errors)
-}
-
-func genTimeStr() string {
-	return strconv.Itoa(int(time.Now().UnixNano()))
 }

@@ -23,7 +23,7 @@ var (
 
 func init() {
 	// 命令行参数
-	flag.StringVar(&topic, "topic", "partition-test-topic", "Topic名称")
+	flag.StringVar(&topic, "topic", "factor-test-topic", "Topic名称")
 	flag.IntVar(&partitionCount, "partitions", 3, "分区数量")
 	// 副本因子说明：
 	// - 1: 无副本，只有主副本

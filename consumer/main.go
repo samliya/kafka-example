@@ -16,6 +16,7 @@ func main() {
 	ConsumerGroup(topic, "my-group", "consumer-1")
 }
 
+/*单分区消费者的实现*/
 func singlePartition(topic string) {
 	config := sarama.NewConfig()
 	consumer, err := sarama.NewConsumer([]string{conf.HOST}, config)
@@ -33,6 +34,7 @@ func singlePartition(topic string) {
 	}
 }
 
+/*多分区消费者的实现*/
 func MutiPartitions(topic string) {
 	config := sarama.NewConfig()
 	consumer, err := sarama.NewConsumer([]string{conf.HOST}, config)
@@ -96,6 +98,8 @@ func ConsumerGroup(topic, group, name string) {
 	}()
 	wg.Wait()
 }
+
+/*消费者组的实现*/
 
 type MYConsumerGroupHandler struct {
 	name  string
